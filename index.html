@@ -369,76 +369,6 @@ h1 span {
   transform: translateY(-2px);
 }
 
-/* --- HERO IMAGE --- */
-.hero-visual {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 24px;
-  width: 100%;
-  max-width: 440px;
-}
-
-.hero-img-container {
-  position: relative;
-  width: 100%;
-}
-
-.hero-img-main {
-  position: relative;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 25px 70px rgba(0, 0, 0, .6), 0 0 50px rgba(34, 197, 94, .15);
-  border: 1px solid var(--line);
-  transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
-  transition: all .6s ease;
-  animation: fadeInUp .8s ease-out .6s both;
-}
-
-.hero-img-main:hover {
-  transform: perspective(1000px) rotateY(-2deg) rotateX(1deg) scale(1.02);
-  box-shadow: 0 30px 80px rgba(0, 0, 0, .7), 0 0 80px rgba(34, 197, 94, .25);
-}
-
-.hero-img-main img {
-  width: 100%;
-  height: auto;
-  display: block;
-  filter: contrast(102%) brightness(.94) saturate(90%);
-  transition: all .6s ease;
-}
-
-.hero-img-main:hover img {
-  filter: contrast(104%) brightness(.97) saturate(100%);
-}
-
-.hero-img-main::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(3, 8, 6, .55) 0%, transparent 35%),
-              radial-gradient(ellipse at center, transparent 45%, rgba(3, 8, 6, .25) 100%);
-  pointer-events: none;
-}
-
-.hero-glow {
-  position: absolute;
-  width: 70%;
-  height: 70%;
-  top: 15%;
-  left: 15%;
-  background: radial-gradient(circle, rgba(34, 197, 94, .25) 0%, transparent 65%);
-  filter: blur(45px);
-  z-index: -1;
-  animation: pulse 4s ease-in-out infinite alternate;
-}
-
-@keyframes pulse {
-  0% { opacity: .6; transform: scale(1); }
-  100% { opacity: 1; transform: scale(1.08); }
-}
-
 /* --- SECTIONS --- */
 section {
   padding: 60px 20px;
@@ -945,7 +875,6 @@ body:hover .cursor-glow {
 /* --- RESPONSIVE --- */
 @media (max-width: 480px) {
   .hero { padding: 80px 16px 36px; }
-  .hero-img-main { border-radius: 16px; }
   .features-grid { gap: 10px; }
   .feature-card { padding: 16px; }
   .feature-icon { width: 40px; height: 40px; border-radius: 11px; }
@@ -1008,15 +937,6 @@ body:hover .cursor-glow {
     <div class="hero-btns">
       <a href="#download" class="btn btn-primary">تحميل التطبيق</a>
       <a href="#features" class="btn btn-secondary">استكشف المميزات</a>
-    </div>
-  </div>
-  
-  <div class="hero-visual">
-    <div class="hero-img-container">
-      <div class="hero-glow"></div>
-      <div class="hero-img-main">
-        <img src="ChatGPT Image 14 أغسطس 2026، 01_28_35 ص.png" alt="واجهة تطبيق مديرك المالي" loading="lazy">
-      </div>
     </div>
   </div>
 </section>
