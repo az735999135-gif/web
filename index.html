@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>مديرك المالي</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap');
+
+:root {
+  --bg: #020503;
+  --bg2: #06100a;
+  --bg3: #0a1a10;
+  --card: #0c1a10;
+  --g: #4ade80;
+  --g2: #22c55e;
+  --g3: #15803d;
+  --white: #f8faf9;
+  --muted: #9ca89f;
+  --line: rgba(74, 222, 128, .12);
+  --red: #ff6262;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Cairo', sans-serif;
+  background: var(--bg);
+  color: var(--white);
+  overflow-x: hidden;
+  line-height: 1.6;
+  position: relative;
+}
+
+/* --- ANIMATED BACKGROUND GLOW --- */
+.bg-glow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: .4;
+  animation: floatOrb 8s ease-in-out infinite;
+}
+
+.glow-orb:nth-child(1) {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(34, 197, 94, .3) 0%, transparent 70%);
+  top: -100px; right: -100px;
+  animation-delay: 0s;
+}
+
+.glow-orb:nth-child(2) {
+  width: 250px; height: 250px;
+  background: radial-gradient(circle, rgba(74, 222, 128, .25) 0%, transparent 70%);
+  bottom: -80px; left: -80px;
+  animation-delay: 3s;
+  animation-duration: 10s;
+}
+
+.glow-orb:nth-child(3) {
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(34, 197, 94, .2) 0%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation-delay: 5s;
+  animation-duration: 12s;
+}
+
+@keyframes floatOrb {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -30px) scale(1.1); }
+  50% { transform: translate(-20px, 20px) scale(0.95); }
+  75% { transform: translate(20px, 10px) scale(1.05); }
+}
+
+/* --- HEADER --- */
+header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 1000;
+  background: rgba(2, 5, 3, .85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--line);
+  transition: all .3s;
+}
+
+header.scrolled {
+  background: rgba(2, 5, 3, .95);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, .3);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--white);
+  text-decoration: none;
+}
+
+.logo {
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, var(--g2), var(--g3));
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 20px rgba(34, 197, 94, .3);
+  animation: logoPulse 3s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(34, 197, 94, .3); }
+  50% { box-shadow: 0 0 30px rgba(34, 197, 94, .5); }
+}
+
+.logo svg { width: 20px; height: 20px; }
+
+nav {
+  display: none;
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  position: relative;
+  z-index: 2001;
+}
+
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--white);
+  border-radius: 2px;
+  transition: all .3s;
+}
+
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(4px, 4px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+.nav-mobile {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 5, 3, .98);
+  z-index: 2000;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  font-size: 18px;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity .3s;
+}
+
+.nav-mobile.open {
+  display: flex;
+  opacity: 1;
+}
+
+.nav-mobile a {
+  color: var(--white);
+  padding: 14px 28px;
+  border-radius: 14px;
+  transition: all .3s;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-mobile a::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(34, 197, 94, .1), rgba(34, 197, 94, .05));
+  opacity: 0;
+  transition: opacity .3s;
+}
+
+.nav-mobile a:hover::before, .nav-mobile a.active::before {
+  opacity: 1;
+}
+
+.nav-mobile a:hover, .nav-mobile a.active {
+  color: var(--g);
+  transform: translateX(-5px);
+}
+
+.nav-close {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 28px;
+  cursor: pointer;
+  width: 40px; height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  transition: all .3s;
+}
+
+.nav-close:hover {
+  background: rgba(255, 255, 255, .06);
+  transform: rotate(90deg);
+}
+
+/* --- HERO --- */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 90px 20px 50px;
+  position: relative;
+}
+
+.hero-content { z-index: 2; max-width: 600px; }
+
+.kicker {
+  display: inline-block;
+  color: var(--g);
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  padding: 5px 12px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: rgba(74, 222, 128, .05);
+  letter-spacing: 1px;
+  animation: fadeInUp .8s ease-out;
+}
+
+h1 {
+  font-size: clamp(36px, 8vw, 56px);
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 14px;
+  background: linear-gradient(135deg, var(--white) 0%, var(--g) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: fadeInUp .8s ease-out .2s both;
+}
+
+h1 span {
+  background: linear-gradient(135deg, var(--g) 0%, var(--g2) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tagline {
+  font-size: clamp(16px, 4vw, 22px);
+  color: var(--g);
+  font-weight: 700;
+  margin-bottom: 16px;
+  animation: fadeInUp .8s ease-out .3s both;
+}
+
+.hero-desc {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.9;
+  margin-bottom: 28px;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: fadeInUp .8s ease-out .4s both;
+}
+
+.hero-btns {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: fadeInUp .8s ease-out .5s both;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 13px 20px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all .3s;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, .1), transparent);
+  opacity: 0;
+  transition: opacity .3s;
+}
+
+.btn:hover::before {
+  opacity: 1;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--g2), var(--g3));
+  color: var(--bg);
+  box-shadow: 0 8px 25px rgba(34, 197, 94, .3);
+  animation: btnGlow 2s ease-in-out infinite;
+}
+
+@keyframes btnGlow {
+  0%, 100% { box-shadow: 0 8px 25px rgba(34, 197, 94, .3); }
+  50% { box-shadow: 0 8px 35px rgba(34, 197, 94, .5); }
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 12px 40px rgba(34, 197, 94, .4);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, .03);
+  color: var(--white);
+  border: 1px solid var(--line);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, .06);
+  border-color: rgba(74, 222, 128, .3);
+  transform: translateY(-2px);
+}
+
+/* --- HERO IMAGE --- */
+.hero-visual {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24px;
+  width: 100%;
+  max-width: 440px;
+}
+
+.hero-img-container {
+  position: relative;
+  width: 100%;
+}
+
+.hero-img-main {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, .6), 0 0 50px rgba(34, 197, 94, .15);
+  border: 1px solid var(--line);
+  transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
+  transition: all .6s ease;
+  animation: fadeInUp .8s ease-out .6s both;
+}
+
+.hero-img-main:hover {
+  transform: perspective(1000px) rotateY(-2deg) rotateX(1deg) scale(1.02);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .7), 0 0 80px rgba(34, 197, 94, .25);
+}
+
+.hero-img-main img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: contrast(102%) brightness(.94) saturate(90%);
+  transition: all .6s ease;
+}
+
+.hero-img-main:hover img {
+  filter: contrast(104%) brightness(.97) saturate(100%);
+}
+
+.hero-img-main::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(3, 8, 6, .55) 0%, transparent 35%),
+              radial-gradient(ellipse at center, transparent 45%, rgba(3, 8, 6, .25) 100%);
+  pointer-events: none;
+}
+
+.hero-glow {
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  top: 15%;
+  left: 15%;
+  background: radial-gradient(circle, rgba(34, 197, 94, .25) 0%, transparent 65%);
+  filter: blur(45px);
+  z-index: -1;
+  animation: pulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  0% { opacity: .6; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1.08); }
+}
+
+/* --- SECTIONS --- */
+section {
+  padding: 60px 20px;
+  position: relative;
+}
+
+.section-header {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 32px;
+}
+
+.eyebrow {
+  color: var(--g);
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: 1.5px;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .7; }
+}
+
+h2 {
+  font-size: clamp(26px, 6vw, 38px);
+  font-weight: 800;
+  margin-bottom: 12px;
+  line-height: 1.25;
+  background: linear-gradient(135deg, var(--white) 0%, var(--g) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-desc {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.85;
+}
+
+/* --- FEATURES --- */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  background: linear-gradient(145deg, rgba(255, 255, 255, .03), rgba(255, 255, 255, .01));
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 20px;
+  transition: all .3s;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  cursor: pointer;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 80px;
+  height: 80px;
+  background: radial-gradient(circle, rgba(34, 197, 94, .1) 0%, transparent 70%);
+  border-radius: 50%;
+  transition: all .3s;
+}
+
+.feature-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(34, 197, 94, .05) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity .3s;
+}
+
+.feature-card:hover::after {
+  opacity: 1;
+}
+
+.feature-card:hover {
+  transform: translateY(-3px) scale(1.02);
+  border-color: rgba(74, 222, 128, .3);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, .3), 0 0 30px rgba(34, 197, 94, .15);
+}
+
+.feature-card:hover::before {
+  transform: scale(1.5);
+  opacity: .5;
+}
+
+.feature-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(34, 197, 94, .15), rgba(34, 197, 94, .05));
+  display: grid;
+  place-items: center;
+  margin: 0 auto 12px;
+  color: var(--g);
+  position: relative;
+  z-index: 1;
+  transition: all .3s;
+}
+
+.feature-card:hover .feature-icon {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 0 20px rgba(34, 197, 94, .3);
+}
+
+.feature-icon svg { width: 24px; height: 24px; }
+
+.feature-card h3 {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+.feature-card p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+  position: relative;
+  z-index: 1;
+}
+
+/* --- ABOUT --- */
+.about-section {
+  background: var(--bg2);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+}
+
+.about-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: radial-gradient(circle at 30% 50%, rgba(34, 197, 94, .05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.about-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  max-width: 520px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.about-content h2 {
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.about-content > p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.85;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.about-features {
+  display: grid;
+  gap: 10px;
+}
+
+.about-feature {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--white);
+  font-size: 14px;
+  background: rgba(255, 255, 255, .02);
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  transition: all .3s;
+  cursor: pointer;
+}
+
+.about-feature:hover {
+  background: rgba(74, 222, 128, .05);
+  border-color: rgba(74, 222, 128, .2);
+  transform: translateX(-5px);
+}
+
+.about-feature i {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  background: rgba(34, 197, 94, .12);
+  display: grid;
+  place-items: center;
+  color: var(--g);
+  font-style: normal;
+  font-weight: 700;
+  flex-shrink: 0;
+  font-size: 13px;
+  transition: all .3s;
+}
+
+.about-feature:hover i {
+  background: rgba(34, 197, 94, .2);
+  box-shadow: 0 0 15px rgba(34, 197, 94, .3);
+}
+
+.about-image {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, .5);
+  border: 1px solid var(--line);
+  transition: all .6s ease;
+}
+
+.about-image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, .6), 0 0 40px rgba(34, 197, 94, .15);
+}
+
+.about-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  filter: contrast(102%) brightness(.94);
+  transition: all .6s ease;
+}
+
+.about-image:hover img {
+  transform: scale(1.03);
+  filter: contrast(104%) brightness(.97);
+}
+
+.about-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(3, 8, 6, .45) 0%, transparent 45%);
+  pointer-events: none;
+}
+
+/* --- CTA --- */
+.cta-section {
+  text-align: center;
+  padding: 80px 20px;
+  position: relative;
+}
+
+.cta-card {
+  max-width: 520px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, rgba(34, 197, 94, .08), rgba(21, 128, 61, .03));
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  padding: 40px 24px;
+  position: relative;
+  overflow: hidden;
+  transition: all .3s;
+}
+
+.cta-card:hover {
+  border-color: rgba(74, 222, 128, .2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .3), 0 0 40px rgba(34, 197, 94, .1);
+}
+
+.cta-card::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(34, 197, 94, .08) 0%, transparent 60%);
+  animation: rotate 20s linear infinite;
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.cta-card > * { position: relative; z-index: 1; }
+
+.cta-card h2 {
+  margin-bottom: 12px;
+  font-size: clamp(24px, 6vw, 34px);
+}
+
+.cta-card p {
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 24px;
+  line-height: 1.8;
+}
+
+.download-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.download-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 22px;
+  background: var(--white);
+  color: var(--bg);
+  border-radius: 16px;
+  text-decoration: none;
+  font-weight: 700;
+  transition: all .3s;
+  border: 1px solid transparent;
+  width: 100%;
+  max-width: 280px;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.download-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(34, 197, 94, .1), transparent);
+  opacity: 0;
+  transition: opacity .3s;
+}
+
+.download-btn:hover::before {
+  opacity: 1;
+}
+
+.download-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .2), 0 0 20px rgba(34, 197, 94, .2);
+}
+
+.download-btn svg { width: 26px; height: 26px; flex-shrink: 0; position: relative; z-index: 1; }
+
+.download-btn .btn-text {
+  position: relative;
+  z-index: 1;
+  text-align: right;
+}
+
+.download-btn .btn-text small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* --- FOOTER --- */
+footer {
+  border-top: 1px solid var(--line);
+  padding: 40px 20px 24px;
+  background: var(--bg2);
+  position: relative;
+  overflow: hidden;
+}
+
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: radial-gradient(circle at 50% 0%, rgba(34, 197, 94, .05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.footer-content {
+  max-width: 520px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-brand p {
+  color: var(--muted);
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.footer-links {
+  margin-top: 24px;
+}
+
+.footer-links h4 {
+  color: var(--white);
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.footer-contact {
+  margin-top: 18px;
+  padding: 16px;
+  background: rgba(255, 255, 255, .02);
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  transition: all .3s;
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+}
+
+.footer-contact:hover {
+  border-color: rgba(74, 222, 128, .2);
+  box-shadow: 0 0 20px rgba(34, 197, 94, .1);
+}
+
+.footer-contact-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  text-decoration: none;
+  transition: all .3s;
+}
+
+.footer-contact-item:hover {
+  color: var(--g);
+  transform: translateY(-2px);
+}
+
+.footer-contact-item svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.footer-contact-item.wa { color: var(--g); }
+
+.copyright {
+  text-align: center;
+  padding-top: 18px;
+  margin-top: 18px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 11px;
+}
+
+/* --- ANIMATIONS --- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  opacity: 0;
+  transform: translateY(25px);
+  transition: all .8s cubic-bezier(.16, 1, .3, 1);
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- CURSOR GLOW --- */
+.cursor-glow {
+  position: fixed;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(34, 197, 94, .15) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: opacity .3s;
+  opacity: 0;
+}
+
+body:hover .cursor-glow {
+  opacity: 1;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 480px) {
+  .hero { padding: 80px 16px 36px; }
+  .hero-img-main { border-radius: 16px; }
+  .features-grid { gap: 10px; }
+  .feature-card { padding: 16px; }
+  .feature-icon { width: 40px; height: 40px; border-radius: 11px; }
+  .feature-icon svg { width: 22px; height: 22px; }
+  .feature-card h3 { font-size: 14px; }
+  .feature-card p { font-size: 11px; }
+  .cta-card { padding: 32px 18px; }
+}
+
+/* --- SCROLLBAR --- */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--g3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--g2); }
+</style>
+</head>
+<body>
+
+<!-- Background Effects -->
+<div class="bg-glow">
+  <div class="glow-orb"></div>
+  <div class="glow-orb"></div>
+  <div class="glow-orb"></div>
+</div>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<header>
+  <a href="#" class="brand">
+    <span class="logo">
+      <svg viewBox="0 0 48 48" fill="none">
+        <path d="M8 14.5A5.5 5.5 0 0 1 13.5 9H36a4 4 0 0 1 4 4v23a3 3 0 0 1-3 3H13.5A5.5 5.5 0 0 1 8 33.5v-19Z" fill="white"/>
+        <path d="M13 19h18.5A4.5 4.5 0 0 1 36 23.5v8A4.5 4.5 0 0 1 31.5 36H13a4 4 0 0 1 0-8h18" stroke="#15803d" stroke-width="3.8"/>
+        <circle cx="29" cy="32" r="2.2" fill="#15803d"/>
+      </svg>
+    </span>
+    مديرك المالي
+  </a>
+  <button class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<div class="nav-mobile" id="navMobile">
+  <button class="nav-close" onclick="toggleMenu()">✕</button>
+  <a href="#home" class="active" onclick="toggleMenu()">الرئيسية</a>
+  <a href="#features" onclick="toggleMenu()">المميزات</a>
+  <a href="#about" onclick="toggleMenu()">عن التطبيق</a>
+  <a href="#download" onclick="toggleMenu()">التحميل</a>
+  <a href="#contact" onclick="toggleMenu()">تواصل معنا</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-content">
+    <div class="kicker">إدارة مالية ذكية</div>
+    <h1>مديرك <span>المالي</span></h1>
+    <div class="tagline">مش لازم تكون محاسب</div>
+    <p class="hero-desc">تطبيق ذكي وبسيط يساعدك على إدارة عملائك، تسجيل المعاملات، تتبع الرصيد، وإنشاء تقارير احترافية في أي وقت ومن أي مكان.</p>
+    <div class="hero-btns">
+      <a href="#download" class="btn btn-primary">تحميل التطبيق</a>
+      <a href="#features" class="btn btn-secondary">استكشف المميزات</a>
+    </div>
+  </div>
+  
+  <div class="hero-visual">
+    <div class="hero-img-container">
+      <div class="hero-glow"></div>
+      <div class="hero-img-main">
+        <img src="ChatGPT Image 14 أغسطس 2026، 01_28_35 ص.png" alt="واجهة تطبيق مديرك المالي" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-header fade-in">
+    <div class="eyebrow">المميزات</div>
+    <h2>كل ما تحتاجه في تطبيق واحد</h2>
+    <p class="section-desc">أدوات قوية ومصممة بعناية لمساعدتك في إدارة أموالك بذكاء وسهولة</p>
+  </div>
+  
+  <div class="features-grid">
+    <div class="feature-card fade-in">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <h3>إدارة العملاء</h3>
+      <p>أضف عملاءك واحفظ بياناتهم بسهولة</p>
+    </div>
+    
+    <div class="feature-card fade-in">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      </div>
+      <h3>الديون والحسابات</h3>
+      <p>تابع ما لك وما عليك بوضوح</p>
+    </div>
+    
+    <div class="feature-card fade-in">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      </div>
+      <h3>تقارير PDF</h3>
+      <p>تقارير احترافية بضغطة واحدة</p>
+    </div>
+    
+    <div class="feature-card fade-in">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+      </div>
+      <h3>تخزين سحابي</h3>
+      <p>احفظ بياناتك في السحابة</p>
+    </div>
+    
+    <div class="feature-card fade-in">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+      </div>
+      <h3>تخزين محلي</h3>
+      <p>بياناتك محفوظة محلياً بسرعة</p>
+    </div>
+    
+    <div class="feature-card fade-in">
+      <div class="feature-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <h3>أمان وخصوصية</h3>
+      <p>بياناتك تحت سيطرتك دائماً</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <div class="about-grid">
+    <div class="about-content fade-in">
+      <div class="eyebrow">عن التطبيق</div>
+      <h2>واجهة بسيطة، قوة كبيرة</h2>
+      <p>مديرك المالي يجمع كل أدواتك المالية في مكان واحد. واجهة هادئة وسريعة تساعدك على التركيز في ما يهم - نمو نشاطك.</p>
+      <div class="about-features">
+        <div class="about-feature">
+          <i>✓</i>
+          <span>بحث سريع عن العملاء</span>
+        </div>
+        <div class="about-feature">
+          <i>✓</i>
+          <span>تواصل مباشر مع العملاء</span>
+        </div>
+        <div class="about-feature">
+          <i>✓</i>
+          <span>تقارير مالية مفصلة</span>
+        </div>
+        <div class="about-feature">
+          <i>✓</i>
+          <span>نسخ احتياطي تلقائي</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="about-image fade-in">
+      <img src="ChatGPT Image 14 أغسطس 2026، 01_28_05 ص.png" alt="شاشات تطبيق مديرك المالي" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="download">
+  <div class="cta-card fade-in">
+    <div class="eyebrow">ابدأ الآن</div>
+    <h2>جاهز تتحكم في أموالك؟</h2>
+    <p>حمّل مديرك المالي اليوم وابدأ رحلتك نحو إدارة مالية أذكى وأبسط</p>
+    <div class="download-btns">
+      <a href="#" class="download-btn" onclick="alert('أضف رابط Google Play هنا');return false">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 2v20l10.5-10L3 2Zm12 10 4.5-2.6L17 8l-3.2 2.3L15 12Zm0 0L19.5 14.6 17 16l-3.2-2.3L15 12Z"/></svg>
+        <div class="btn-text">
+          <strong>تحميل للأندرويد</strong>
+          <small>متاح الآن على Google Play</small>
+        </div>
+      </a>
+      <a href="#" class="download-btn" style="opacity: .5; cursor: not-allowed;" onclick="return false">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 12.7c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.7.8-3.4.8-.7 0-1.8-.8-2.9-.8-1.5 0-2.9.9-3.7 2.2-1.6 2.7-.4 6.7 1.1 8.9.8 1.1 1.6 2.3 2.8 2.2 1.1 0 1.6-.7 3-.7s1.8.7 3 .7c1.2 0 2-1.1 2.7-2.2.9-1.3 1.3-2.6 1.3-2.7-.1 0-2.5-1-2.5-3.1ZM15 5.8c.6-.7 1-1.7.9-2.7-.9 0-2 .6-2.6 1.3-.6.7-1 1.7-.9 2.6 1 .1 2-.5 2.6-1.2Z"/></svg>
+        <div class="btn-text">
+          <strong>تحميل للآيفون</strong>
+          <small>قريباً على App Store</small>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="footer-content">
+    <div class="footer-brand">
+      <a href="#" class="brand">
+        <span class="logo">
+          <svg viewBox="0 0 48 48" fill="none">
+            <path d="M8 14.5A5.5 5.5 0 0 1 13.5 9H36a4 4 0 0 1 4 4v23a3 3 0 0 1-3 3H13.5A5.5 5.5 0 0 1 8 33.5v-19Z" fill="white"/>
+            <path d="M13 19h18.5A4.5 4.5 0 0 1 36 23.5v8A4.5 4.5 0 0 1 31.5 36H13a4 4 0 0 1 0-8h18" stroke="#15803d" stroke-width="3.8"/>
+            <circle cx="29" cy="32" r="2.2" fill="#15803d"/>
+          </svg>
+        </span>
+        مديرك المالي
+      </a>
+      <p>تطبيق ذكي لإدارة العملاء والديون والحسابات والتقارير</p>
+    </div>
+    
+    <div class="footer-links">
+      <h4>تواصل معنا</h4>
+      <div class="footer-contact">
+        <a href="https://wa.me/967735999135" target="_blank" class="footer-contact-item wa" aria-label="واتساب">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4.1A9.9 9.9 0 0 0 12.9 1C7.4.6 2.5 4.7 1.2 10a10 10 0 0 0 1.3 7.5L1 23l5.7-1.5A10 10 0 0 0 12 23h.1c5.5 0 10-4.4 10-10a9.8 9.8 0 0 0-2.1-8.9ZM12 21.1c-1.7 0-3.4-.5-4.8-1.4l-.3-.2-3.4.9.9-3.3-.2-.3a8.1 8.1 0 1 1 7.8 4.3Z"/></svg>
+        </a>
+        <a href="mailto:aspreim@gmail.com" class="footer-contact-item" aria-label="بريد إلكتروني">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m4 7 8 6 8-6"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="copyright">
+    © 2026 مديرك المالي — جميع الحقوق محفوظة
+  </div>
+</footer>
+
+<script>
+// Toggle Mobile Menu
+function toggleMenu() {
+  const nav = document.getElementById('navMobile');
+  const hamburger = document.querySelector('.hamburger');
+  nav.classList.toggle('open');
+  hamburger.classList.toggle('active');
+}
+
+// Cursor Glow
+const cursorGlow = document.getElementById('cursorGlow');
+let mouseX = 0, mouseY = 0;
+let glowX = 0, glowY = 0;
+
+document.addEventListener('mousemove', (e) => {
+  mouseX = e.clientX;
+  mouseY = e.clientY;
+});
+
+function animateGlow() {
+  glowX += (mouseX - glowX) * 0.1;
+  glowY += (mouseY - glowY) * 0.1;
+  cursorGlow.style.left = glowX + 'px';
+  cursorGlow.style.top = glowY + 'px';
+  requestAnimationFrame(animateGlow);
+}
+animateGlow();
+
+// Header Scroll Effect
+window.addEventListener('scroll', () => {
+  const header = document.querySelector('header');
+  if (window.scrollY > 50) {
+    header.classList.add('scrolled');
+  } else {
+    header.classList.remove('scrolled');
+  }
+});
+
+// Intersection Observer for fade-in
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Touch feedback for mobile
+document.querySelectorAll('.feature-card, .about-feature, .download-btn').forEach(el => {
+  el.addEventListener('touchstart', function() {
+    this.style.transform = 'scale(0.98)';
+  });
+  el.addEventListener('touchend', function() {
+    this.style.transform = '';
+  });
+});
+</script>
+
+</body>
+</html>
